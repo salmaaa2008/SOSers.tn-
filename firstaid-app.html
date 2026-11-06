@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>SOSers.tn — first aid, fast</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;700&display=swap">
+<style>
+:root{--bg:#f2f4f7;--card:#fff;--ink:#1f2430;--mut:#667085;--line:#e1e5eb;--red:#d3202f;--redsoft:#fdecee;--teal:#0f766e;--tealsoft:#e3f4f1;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#13161b;--card:#1e222a;--ink:#eef0f3;--mut:#9aa3b2;--line:#2d333d;--redsoft:#3a1a1f;--tealsoft:#12302d}}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--ink);font-family:Rubik,system-ui,-apple-system,"Segoe UI",sans-serif;font-size:16px;line-height:1.45}
+#app{max-width:480px;margin:0 auto;min-height:100vh;display:flex;flex-direction:column}
+header{display:flex;align-items:center;justify-content:space-between;padding:14px 18px}
+header b{font-size:22px;letter-spacing:-.3px}
+header b i{color:var(--red);font-style:normal}
+.bell{position:relative;background:var(--card);border:1px solid var(--line);border-radius:12px;width:44px;height:44px;font-size:20px;cursor:pointer;color:var(--ink)}
+.bell span{position:absolute;top:-5px;right:-5px;background:var(--red);color:#fff;font-size:11px;border-radius:10px;min-width:18px;height:18px;line-height:18px;font-weight:700}
+main{flex:1;padding:0 18px 96px}
+nav{position:fixed;bottom:0;left:0;right:0;max-width:480px;margin:0 auto;display:flex;background:var(--card);border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom,0px)}
+nav button{flex:1;background:none;border:0;padding:10px 0 9px;font:inherit;font-size:12px;color:var(--mut);cursor:pointer}
+nav button b{display:block;font-size:20px;font-weight:400}
+nav button.on{color:var(--red);font-weight:700}
+h2{font-size:26px;margin:6px 0 4px;letter-spacing:-.4px}
+p.sub{color:var(--mut);margin:0 0 16px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px;margin-bottom:12px}
+.btn{display:block;width:100%;border:0;border-radius:14px;padding:15px;font:inherit;font-weight:700;font-size:16px;cursor:pointer;background:var(--red);color:#fff;text-align:center;text-decoration:none}
+.btn.alt{background:var(--card);color:var(--ink);border:1px solid var(--line)}
+.btn.teal{background:var(--teal)}
+button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid var(--teal);outline-offset:2px}
+.sosWrap{text-align:center;padding:18px 0 8px}
+.sos{width:220px;height:220px;border-radius:50%;border:0;background:var(--red);color:#fff;font:inherit;font-size:44px;font-weight:700;cursor:pointer;box-shadow:0 0 0 14px var(--redsoft),0 0 0 30px color-mix(in srgb,var(--red) 8%,transparent)}
+.sos small{display:block;font-size:14px;font-weight:400;margin-top:2px}
+label{display:block;font-weight:500;margin:14px 0 6px}
+input,select{width:100%;padding:13px;border-radius:12px;border:1px solid var(--line);background:var(--bg);color:var(--ink);font:inherit}
+.row{display:flex;gap:10px;align-items:center}
+.row>*{flex:1}
+.step{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.step button{flex:0 0 48px;height:48px;border-radius:12px;border:1px solid var(--line);background:var(--card);font-size:22px;color:var(--ink);cursor:pointer}
+.step output{flex:1;text-align:center;font-size:24px;font-weight:700}
+.map{position:relative;height:150px;border-radius:14px;overflow:hidden;background:linear-gradient(var(--line) 1px,transparent 1px) 0 0/32px 32px,linear-gradient(90deg,var(--line) 1px,transparent 1px) 0 0/32px 32px,var(--bg);border:1px solid var(--line)}
+.route{position:absolute;left:8%;right:10%;top:50%;border-top:3px dashed var(--mut);opacity:.5}
+.pin{position:absolute;right:6%;top:50%;transform:translateY(-60%);font-size:30px}
+.amb{position:absolute;top:50%;left:8%;font-size:32px;transform:translate(-50%,-62%) scaleX(-1);transition:left 1s linear}
+.eta{font-size:40px;font-weight:700;color:var(--red);line-height:1}
+.dot{display:inline-block;width:10px;height:10px;border-radius:50%;background:var(--teal);margin-right:8px}
+.dot.pulse{background:var(--red);animation:pl 1s infinite}
+@keyframes pl{50%{transform:scale(1.7);opacity:.4}}
+.tag{display:inline-block;background:var(--tealsoft);color:var(--teal);border-radius:8px;padding:2px 9px;font-size:13px;font-weight:500}
+.tag.red{background:var(--redsoft);color:var(--red)}
+.bar{height:8px;border-radius:6px;background:var(--line);overflow:hidden;margin-top:8px}
+.bar i{display:block;height:100%;background:var(--teal);border-radius:6px}
+.player{position:relative;aspect-ratio:16/9;border-radius:14px;background:#10151c;color:#fff;overflow:hidden;display:flex;align-items:center;justify-content:center;text-align:center;margin-bottom:12px}
+.player .ov{position:absolute;inset:0;background:rgba(10,14,20,.78);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;padding:12px}
+.player .ov strong{font-size:30px}
+.player .pb{position:absolute;left:0;bottom:0;height:5px;background:var(--red)}
+.player .play{font-size:54px;background:none;border:0;color:#fff;cursor:pointer}
+.split{display:flex;height:14px;border-radius:7px;overflow:hidden;margin:10px 0 6px}
+.split i:nth-child(1){background:var(--red)}.split i:nth-child(2){background:var(--teal)}.split i:nth-child(3){background:var(--mut)}
+.leg{font-size:14px;color:var(--mut)}
+.drawer{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:20;display:none}
+.drawer.on{display:block}
+.drawer aside{position:absolute;right:0;top:0;bottom:0;width:min(340px,88vw);background:var(--bg);padding:18px;padding-top:calc(18px + env(safe-area-inset-top,0px));overflow:auto}
+.note{display:flex;gap:12px;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px;margin-bottom:10px;font-size:15px}
+.note.un{border-left:4px solid var(--red)}
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:30;display:flex;align-items:flex-end;justify-content:center}
+.modal>div{background:var(--card);width:100%;max-width:480px;border-radius:22px 22px 0 0;padding:20px;padding-bottom:calc(20px + env(safe-area-inset-bottom,0px))}
+#flash{position:fixed;inset:0;z-index:50;display:none;flex-direction:column;align-items:center;justify-content:center;color:#fff;text-align:center;padding:24px;background:#d3202f;animation:fl .6s infinite}
+#flash.on{display:flex}
+#flash h1{font-size:44px;margin:0 0 8px}
+@keyframes fl{0%,100%{background:#d3202f}50%{background:#5a0a12}}
+@media(prefers-reduced-motion:reduce){#flash{animation:none}.dot.pulse{animation:none}}
+.toast{position:fixed;left:50%;bottom:90px;transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:12px;z-index:40;font-size:14px}
+</style>
+</head>
+<body>
+<div id="app">
+<header><b>SOSers<i>.tn</i></b><button class="bell" id="bell" aria-label="Notifications">🔔<span id="badge"></span></button></header>
+<main id="main"></main>
+<nav id="nav"></nav>
+</div>
+<div class="drawer" id="drawer"><aside id="side"></aside></div>
+<div id="flash"></div>
+<div id="slot"></div>
+
+<script>
+var S={tab:'sos',sos:'home',user:null,f:{loc:'',injury:'Not breathing',n:1,phone:''},
+lessons:[
+{id:1,t:'Hands-only CPR',yt:'M4ACYp75mjU',ch:'American Heart Association',p:0,sec:0},
+{id:2,t:'Treating severe bleeding',yt:'NxO5LvgqZe0',ch:'St John Ambulance',p:0,sec:0},
+{id:3,t:'What to do when someone is choking',yt:'PA9hpOnvtCk',ch:'St John Ambulance',p:0,sec:0},
+{id:4,t:'The recovery position',yt:'GmqXqwSV3bo',ch:'St John Ambulance',p:0,sec:0}],
+apps:[
+{id:1,u:'Northgate University',t:'Community first-aid volunteer',fee:20,done:false},
+{id:2,u:'Riverside University',t:'Disaster response course',fee:35,done:false},
+{id:3,u:'St. Amir University',t:'Youth health awareness volunteer',fee:15,done:false}],
+read:false,timer:null};
+var $=function(s){return document.querySelector(s)};
+var TABS=[['sos','🚑','Help'],['learn','🎓','Learn'],['vol','🤝','Volunteer'],['me','👤','Me']];
+
+function toast(m){var t=document.createElement('div');t.className='toast';t.textContent=m;document.body.appendChild(t);setTimeout(function(){t.remove()},2400)}
+function modal(h){$('#slot').innerHTML='<div class="modal" onclick="if(event.target===this)closeM()"><div>'+h+'</div></div>'}
+function closeM(){$('#slot').innerHTML=''}
+function go(t){S.tab=t;if(t!=='sos')stopLive();render()}
+
+function notes(){
+ var n=[];
+ S.lessons.forEach(function(l){if(l.p>0&&l.p<100)n.push({i:'📚',t:'You didn’t finish “'+l.t+'”. '+(100-l.p)+'% left — pick up where you stopped.',un:1})});
+ if(S.lessons.every(function(l){return l.p===0}))n.push({i:'👋',t:'Start your first lesson today.',un:1});
+ n.push({i:'🔥',t:'Learners who finish 3 lessons qualify to apply as volunteers.',un:0});
+ return n}
+function renderNotes(){
+ var n=notes(),u=n.filter(function(x){return x.un}).length;
+ $('#badge').textContent=S.read?'':u;$('#badge').style.display=(S.read||!u)?'none':'block';
+ $('#side').innerHTML='<h2>Notifications</h2><p class="sub">Reminders about your lessons and applications.</p>'+n.map(function(x){return '<div class="note '+(x.un&&!S.read?'un':'')+'"><span>'+x.i+'</span><span>'+x.t+'</span></div>'}).join('')+'<button class="btn alt" onclick="$(\'#drawer\').classList.remove(\'on\')">Close</button>'}
+$('#bell').onclick=function(){S.read=true;renderNotes();$('#drawer').classList.add('on')};
+$('#drawer').onclick=function(e){if(e.target===this)this.classList.remove('on')};
+
+function render(){
+ $('#nav').innerHTML=TABS.map(function(t){return '<button class="'+(S.tab===t[0]?'on':'')+'" onclick="go(\''+t[0]+'\')"><b>'+t[1]+'</b>'+t[2]+'</button>'}).join('');
+ var v={sos:vSos,learn:vLearn,vol:vVol,me:vMe}[S.tab]();
+ $('#main').innerHTML=v;renderNotes();window.scrollTo(0,0)}
+
+/* ---------- HELP (no sign-in) ---------- */
+function vSos(){
+ if(S.sos==='home')return '<div class="sosWrap"><h2>Someone hurt?</h2><p class="sub">No account needed. Tap and tell us what happened.</p><button class="sos" onclick="S.sos=\'form\';render()">SOS<small>Get help now</small></button></div><a class="btn alt" href="tel:190">📞 Call 190 (SAMU) instead</a>';
+ if(S.sos==='form')return '<h2>What’s happening?</h2><p class="sub">Dispatchers see this the moment you send it.</p>'+
+ '<label for="loc">Location</label><div class="row"><input id="loc" placeholder="Detecting…" value="'+S.f.loc+'" oninput="S.f.loc=this.value"><button class="btn alt" style="flex:0 0 auto;width:auto;padding:13px 14px" onclick="detect()">📍 Detect</button></div>'+
+ '<label for="inj">Type of injury</label><select id="inj" onchange="S.f.injury=this.value">'+['Not breathing','Heavy bleeding','Chest pain','Broken bone','Burn','Choking','Unconscious','Other'].map(function(o){return '<option'+(o===S.f.injury?' selected':'')+'>'+o+'</option>'}).join('')+'</select>'+
+ '<label>How many people are hurt?</label><div class="step"><button onclick="chg(-1)" aria-label="Fewer">−</button><output id="cnt">'+S.f.n+'</output><button onclick="chg(1)" aria-label="More">+</button></div>'+
+ '<label for="ph">Your phone number</label><input id="ph" type="tel" placeholder="+216 20 000 000" value="'+S.f.phone+'" oninput="S.f.phone=this.value">'+
+ '<div style="height:16px"></div><button class="btn" onclick="send()">Send alert</button><div style="height:10px"></div><button class="btn alt" onclick="S.sos=\'home\';render()">Cancel</button>';
+ return '<h2>Help is on the way</h2><p class="sub">Stay with the patient. Keep your phone on.</p>'+
+ '<div class="card"><div class="map"><div class="route"></div><div class="pin">📍</div><div class="amb" id="amb">🚑</div></div><div style="margin-top:12px" class="row"><div><div class="eta" id="eta">8:00</div><div class="leg">estimated arrival</div></div><div style="text-align:right"><span class="tag red">'+S.f.injury+'</span><div class="leg" style="margin-top:6px">'+S.f.n+' injured</div></div></div></div>'+
+ '<div class="card"><div><span class="dot"></span>Dispatcher alerted</div><div style="margin-top:8px"><span class="dot pulse"></span>Pinging certified Red Crescent first aiders nearby…</div><div id="resp" style="margin-top:10px"></div></div>'+
+ '<button class="btn alt" onclick="preview()">👁 See what first aiders see</button><div style="height:10px"></div><a class="btn alt" href="tel:190">📞 Call 190 (SAMU)</a><div style="height:10px"></div><button class="btn alt" onclick="S.sos=\'home\';stopLive();render()">Done</button>'}
+function chg(d){S.f.n=Math.max(1,S.f.n+d);$('#cnt').textContent=S.f.n}
+function detect(){
+ if(!navigator.geolocation){toast('Location isn’t available. Type the address.');return}
+ $('#loc').placeholder='Detecting…';
+ navigator.geolocation.getCurrentPosition(function(p){S.f.loc=p.coords.latitude.toFixed(5)+', '+p.coords.longitude.toFixed(5);$('#loc').value=S.f.loc},function(){toast('Couldn’t detect. Type the address.')},{timeout:8000})}
+function send(){
+ if(!S.f.loc.trim()||!S.f.phone.trim()){toast('Add your location and phone number.');return}
+ S.sos='live';render();
+ var left=480,total=480,names=[['Nour A.',4],['Omar K.',6],['Layla S.',7]],i=0;
+ stopLive();
+ S.timer=setInterval(function(){
+  left=Math.max(0,left-10);
+  var e=$('#eta');if(!e){stopLive();return}
+  e.textContent=Math.floor(left/60)+':'+('0'+left%60).slice(-2);
+  $('#amb').style.left=(8+(1-left/total)*82)+'%';
+  if(i<names.length&&(total-left)%30===0){var n=names[i++];$('#resp').innerHTML+='<div style="margin-top:6px">✅ <b>'+n[0]+'</b> <span class="tag">certified</span> accepted · '+n[1]+' min away</div>'}
+  if(left===0){stopLive();e.textContent='Arrived'}
+ },1000)}
+function stopLive(){if(S.timer){clearInterval(S.timer);S.timer=null}}
+function preview(){
+ var f=$('#flash');
+ f.innerHTML='<h1>🚨 EMERGENCY</h1><p style="font-size:20px;margin:0 0 4px"><b>'+S.f.injury+'</b> · '+S.f.n+' injured</p><p style="margin:0 0 22px">0.8 km away · Tap to respond</p><button class="btn" style="background:#fff;color:#d3202f;max-width:280px" onclick="$(\'#flash\').classList.remove(\'on\')">I’m on my way</button><button class="btn" style="background:none;color:#fff;max-width:280px;margin-top:8px" onclick="$(\'#flash\').classList.remove(\'on\')">Can’t help now</button>';
+ f.classList.add('on')}
+
+/* ---------- LEARN ---------- */
+function vLearn(){
+ var done=S.lessons.filter(function(l){return l.p>=100}).length;
+ return '<h2>Learn first aid</h2><p class="sub">'+done+' of '+S.lessons.length+' lessons finished. Finish all to apply as a certified volunteer.</p>'+
+ S.lessons.map(function(l){return '<div class="card" onclick="openL('+l.id+')" style="cursor:pointer"><div class="row"><b style="flex:3">'+l.t+'</b><span class="tag" style="flex:0 0 auto">'+(l.p>=100?'Done':Math.round(l.p)+'%')+'</span></div><div class="leg">'+l.ch+'</div><div class="bar"><i style="width:'+l.p+'%"></i></div></div>'}).join('')}
+var cur=null,pl=null;
+function openL(id){
+ cur=S.lessons.filter(function(l){return l.id===id})[0];
+ $('#main').innerHTML='<button class="btn alt" style="width:auto;padding:8px 14px;margin-bottom:12px" onclick="closeL()">← Lessons</button><h2>'+cur.t+'</h2><div class="player" id="pv"></div><p class="leg">Video from '+cur.src+'. In the live app, the lesson’s YouTube link plays here. Demo plays at 10× speed.</p>';
+ paint(false)}
+function paint(playing){
+ var pv=$('#pv');if(!pv)return;
+ var done=cur.p>=100;
+ pv.innerHTML=(playing?'<button class="play" onclick="pause()" aria-label="Pause">⏸</button>':'<div class="ov"><strong>'+(done?'Lesson complete 🎉':cur.p+'%')+'</strong><span>'+(done?'Nice work.':'of this lesson completed')+'</span><button class="play" style="font-size:44px" onclick="'+(done?'cur.p=0;':'')+'play()" aria-label="Play">▶</button></div>')+'<div class="pb" id="pb" style="width:'+cur.p+'%"></div>'}
+function play(){
+ paint(true);clearInterval(pl);
+ pl=setInterval(function(){
+  cur.p=Math.min(100,cur.p+(10/cur.len*100));
+  var b=$('#pb');if(b)b.style.width=cur.p+'%';
+  if(cur.p>=100){cur.p=100;pause();toast('Lesson complete!');renderNotes()}
+ },1000)}
+function pause(){clearInterval(pl);cur.p=Math.round(cur.p);paint(false);renderNotes()}
+function closeL(){clearInterval(pl);if(cur)cur.p=Math.round(cur.p);cur=null;render()}
+
+/* ---------- VOLUNTEER ---------- */
+function vVol(){
+ var ready=S.lessons.every(function(l){return l.p>=100});
+ return '<h2>Volunteer</h2><p class="sub">University courses and volunteer programs. Part of every fee goes to families in need.</p>'+
+ (ready?'':'<div class="card" style="background:var(--tealsoft);border-color:transparent">Finish all lessons to unlock applications. Tip: use the Learn tab (demo: you can still browse).</div>')+
+ S.apps.map(function(a){return '<div class="card"><b>'+a.t+'</b><div class="leg">'+a.u+'</div><div class="row" style="margin-top:10px"><span class="tag" style="flex:0 0 auto">Fee: '+a.fee+' ℏ</span>'+(a.done?'<span class="tag" style="text-align:center">Applied ✓</span>':'<button class="btn teal" style="padding:10px" onclick="apply('+a.id+')">Apply</button>')+'</div></div>'}).join('')}
+function apply(id){
+ if(!S.user){authM(function(){apply(id)});return}
+ var a=S.apps.filter(function(x){return x.id===id})[0];
+ modal('<h2>Application fee</h2><p class="sub">'+a.t+' · '+a.u+'</p><div class="eta" style="color:var(--ink)">'+a.fee+' ℏ</div><div class="split"><i style="width:60%"></i><i style="width:15%"></i><i style="width:25%"></i></div><div class="leg">🟥 60% → '+(a.fee*.6).toFixed(1)+' ℏ families in need<br>🟩 15% → '+(a.fee*.15).toFixed(2)+' ℏ awareness campaigns<br>⬜ 25% → '+(a.fee*.25).toFixed(2)+' ℏ training and running costs</div><p class="leg">Each split is recorded on Hedera so anyone can check it. Demo only: no real payment is taken.</p><button class="btn" onclick="pay('+id+')">Pay '+a.fee+' ℏ</button><div style="height:8px"></div><button class="btn alt" onclick="closeM()">Cancel</button>')}
+function pay(id){
+ var a=S.apps.filter(function(x){return x.id===id})[0];a.done=true;
+ var tx='0.0.'+Math.floor(1e6+Math.random()*9e6)+'@'+Math.floor(Date.now()/1000);
+ modal('<h2>Payment received ✅</h2><p class="sub">Your application to '+a.u+' is in.</p><div class="card leg">Hedera transaction (demo)<br><b style="color:var(--ink);word-break:break-all">'+tx+'</b></div><button class="btn" onclick="closeM();render()">Done</button>')}
+
+/* ---------- ME (account) ---------- */
+function authM(cb){
+ window._cb=cb;
+ modal('<h2>Create your account</h2><p class="sub">You only need one to earn certificates and volunteer. Emergency help never needs it.</p><label for="nm">Full name</label><input id="nm"><label for="em">Email</label><input id="em" type="email"><div style="height:16px"></div><button class="btn" onclick="signup()">Create account</button><div style="height:8px"></div><button class="btn alt" onclick="closeM()">Not now</button>')}
+function signup(){
+ var n=$('#nm').value.trim();if(!n||!$('#em').value.trim()){toast('Enter your name and email.');return}
+ S.user={name:n};closeM();toast('Welcome, '+n+'!');render();if(window._cb){var c=window._cb;window._cb=null;c()}}
+function vMe(){
+ if(!S.user)return '<h2>Your profile</h2><p class="sub">Sign up to save progress, earn a certificate and apply to volunteer.</p><button class="btn" onclick="authM()">Create account</button>';
+ var done=S.lessons.filter(function(l){return l.p>=100}).length,applied=S.apps.filter(function(a){return a.done}).length;
+ return '<h2>Hi, '+S.user.name+'</h2><p class="sub">Your volunteer journey.</p><div class="card"><b>Lessons</b><div class="leg">'+done+' of '+S.lessons.length+' finished</div><div class="bar"><i style="width:'+(done/S.lessons.length*100)+'%"></i></div></div><div class="card"><b>Applications</b><div class="leg">'+applied+' submitted</div></div><div class="card" style="'+(done===S.lessons.length?'background:var(--tealsoft)':'')+'"><b>Certificate</b><div class="leg">'+(done===S.lessons.length?'🎓 First-aid certificate earned. Red Crescent may now invite you to respond.':'Finish all lessons to earn your certificate.')+'</div></div><button class="btn alt" onclick="S.user=null;render()">Sign out</button>'}
+
+/* ---------- real YouTube player (progress read from the embed via postMessage) ---------- */
+var YT='https://www.youtube-nocookie.com';
+function openL(id){
+ cur=S.lessons.filter(function(l){return l.id===id})[0];
+ $('#main').innerHTML='<button class="btn alt" style="width:auto;padding:8px 14px;margin-bottom:12px" onclick="closeL()">← Lessons</button><h2>'+cur.t+'</h2><div class="player"><iframe id="yt" title="'+cur.t+'" src="'+YT+'/embed/'+cur.yt+'?enablejsapi=1&playsinline=1&rel=0&start='+Math.floor(cur.sec)+'" style="position:absolute;inset:0;width:100%;height:100%;border:0" allow="accelerometer; encrypted-media; picture-in-picture; fullscreen" allowfullscreen></iframe><div class="ov" id="ov" style="display:none;pointer-events:none;background:none;justify-content:flex-start;padding-top:12px"></div></div><p class="leg">'+cur.ch+' · <a href="https://www.youtube.com/watch?v='+cur.yt+'" target="_blank" rel="noopener" style="color:var(--teal)">Watch on YouTube</a> if the video doesn’t load here.</p><div class="bar"><i id="lp" style="width:'+cur.p+'%"></i></div><p class="leg" id="lt">'+Math.round(cur.p)+'% completed</p>';
+ var fr=$('#yt');fr.onload=function(){fr.contentWindow.postMessage(JSON.stringify({event:'listening',id:1,channel:'widget'}),'*')}}
+window.addEventListener('message',function(e){
+ if(!cur||!/youtube/.test(e.origin))return;
+ var d;try{d=typeof e.data==='string'?JSON.parse(e.data):e.data}catch(x){return}
+ if(!d)return;
+ if(d.event==='infoDelivery'&&d.info){
+  if(d.info.duration)cur.dur=d.info.duration;
+  if(typeof d.info.currentTime==='number'&&cur.dur)upd(d.info.currentTime);
+  if(typeof d.info.playerState==='number')st(d.info.playerState)}
+ if(d.event==='onStateChange')st(d.info)});
+function upd(t){
+ var p=Math.min(100,t/cur.dur*100);
+ if(p>cur.p){cur.p=p;cur.sec=t}
+ var b=$('#lp');if(b){b.style.width=cur.p+'%';$('#lt').textContent=Math.round(cur.p)+'% completed'}}
+function st(s){
+ var o=$('#ov');if(!o)return;
+ var pill='background:rgba(10,14,20,.88);color:#fff;padding:8px 16px;border-radius:20px;font-weight:500';
+ if(s===2){o.innerHTML='<span style="'+pill+'">⏸ '+Math.round(cur.p)+'% of this lesson completed</span>';o.style.display='flex';renderNotes()}
+ else if(s===1){o.style.display='none'}
+ else if(s===0){cur.p=100;cur.sec=0;$('#lp').style.width='100%';$('#lt').textContent='100% completed';o.innerHTML='<span style="'+pill+'">🎉 Lesson complete</span>';o.style.display='flex';toast('Lesson complete!');renderNotes()}}
+function closeL(){if(cur)cur.p=Math.round(cur.p);cur=null;render()}
+
+render();
+</script>
+</body>
+</html>
